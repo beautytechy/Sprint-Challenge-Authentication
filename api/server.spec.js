@@ -2,56 +2,69 @@ const request = require("supertest");
 
 const server = require("./server.js");
 
-describe("server.js", function() {
-  describe("environment", function() {
-    it("should set environment to testing", function() {
-      expect(process.env.DB_ENV).toBe("testing");
-    });
-  });
+const router = require('../auth/auth-router.js')
 
-  describe("GET /", function() {
-    it("should return a 200 OK", function() {
-      // spin up the server
-      return request(server)
-        .get("/")
-        .then(res => {
-          expect(res.status).toBe(200);
-        });
-      // make GET request to /
-      // look at the http status code for the response
-    });
-
-    it("should return a JSON", function() {
-      return request(server)
-        .get("/")
-        .then(res => {
-          expect(res.type).toMatch(/json/i);
+describe("server.js", function () {
+    describe("environment", function () {
+        it("should set environment to testing", function () {
+            expect(process.env.DB_ENV).toBe("testing");
         });
     });
 
-    it("should return {api: 'up'}", function() {
-      return request(server)
-        .get("/")
-        .then(res => {
-          expect(res.body.api).toBe("up");
+    describe("GET /", function () {
+        it("should return a 200 OK", function () {
+
+            return request(server)
+                .get("/")
+                .then(res => {
+                    expect(res.status).toBe(200);
+                });
+
         });
-    });
 
-    it.skip("auth example", function() {
-      return request(server)
-        .post("/login")
-        .send({ username: "me", password: "pass" })
-        .then(res => {
-          const token = res.body.token;
+        it("should return a JSON", function () {
+            return request(server)
+                .get("/")
+                .then(res => {
+                    expect(res.type).toMatch(/json/i);
+                });
+        });
 
-          return request(server)
-            .get("/")
-            .set("Authorization", token)
-            .then(res => {
-              expect(res.status).toBe(200);
-              expect(Array.isArray(res.body)).toBe(true);
+        describe("POST /login", function () {
+            it("should return a 200 OK", function () {
+
+                return request(router)
+                    .post("/login")
+                    .then(res => {
+                        expect(res.status).toBe(200);
+                    });
+
+            });
+
+            it("should return a JSON", function () {
+                return request(server)
+                    .get("/")
+                    .then(res => {
+                        expect(res.type).toMatch(/json/i);
+                    });
+            });
+        });
+        describe("POST /register", function () {
+            it("should return a 201 OK", function () {
+
+                return request(server)
+                    .get("/")
+                    .then(res => {
+                        expect(res.status).toBe(201);
+                    });
+            });
+            it("should return a JSON", function () {
+                return request(server)
+                    .get("/")
+                    .then(res => {
+                        expect(res.type).toMatch(/json/i);
+                    });
             });
         });
     });
-  });
 });
