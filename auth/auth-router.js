@@ -38,6 +38,7 @@ router.post('/login', (req, res) => {
       }
     })
     .catch(error => {
+      console.log(error)
       res.status(500).json(error);
     });
 });
@@ -48,13 +49,13 @@ function signToken(user) {
 
   };
 
-
+  const secret = process.env.JWT_SECRET || "is it secret, is it safe?";
 
   const options = {
     expiresIn: "1h",
   };
 
-  return jwt.sign(payload, options);
+  return jwt.sign(payload, secret, options);
 }
 
 module.exports = router;
