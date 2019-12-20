@@ -42,8 +42,8 @@ describe("server.js", function () {
             });
 
             it("should return a JSON", function () {
-                return request(server)
-                    .get("/")
+                return request(router)
+                    .post("/login")
                     .then(res => {
                         expect(res.type).toMatch(/json/i);
                     });
@@ -52,15 +52,15 @@ describe("server.js", function () {
         describe("POST /register", function () {
             it("should return a 201 OK", function () {
 
-                return request(server)
-                    .get("/")
+                return request(router)
+                    .post("/register")
                     .then(res => {
                         expect(res.status).toBe(201);
                     });
             });
             it("should return a JSON", function () {
-                return request(server)
-                    .get("/")
+                return request(router)
+                    .post("/register")
                     .then(res => {
                         expect(res.type).toMatch(/json/i);
                     });
